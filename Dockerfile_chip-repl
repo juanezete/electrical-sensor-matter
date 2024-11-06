@@ -1,0 +1,33 @@
+# Dockerfile para chip-repl
+FROM ubuntu:24.04
+
+# Directorio de trabajo
+WORKDIR /home/juan/matter/connectedhomeip
+ENV DEBIAN_FRONTEND=noninteractive
+
+
+# Actualizar e instalar herramientas básicas y software-properties-common
+RUN apt-get update && apt-get install -y software-properties-common curl
+# Agregar el PPA de Deadsnakes para Python 3.10
+RUN add-apt-repository ppa:deadsnakes/ppa -y && apt-get update
+
+# Instalacion de las dependencias necesarias 
+RUN apt-get update && apt-get install -y \
+    git gcc g++ python3.10 python3.10-venv python3-pip \
+    pkg-config libssl-dev libdbus-1-dev libglib2.0-dev \
+    libavahi-client-dev libavahi-core-dev avahi-daemon avahi-discover libnss-mdns avahi-utils\
+    ninja-build unzip libgirepository1.0-dev libcairo2-dev bluez dbus expect 
+
+# Hbailitación de servicios de Avahi y D-Bus 
+RUN systemctl enable dbus && systemctl enable avahi-daemon
+
+# Creacion del directorio de almacenamiento persistente 
+RUN mkdir -p /home/juan/matter/connectedhomeip/storage && chmod 777 /home/juan/matter/connectedhomeip/storage
+RUN touch /tmp/repl-storage.json && chown 1000:1000 /tmp/repl-storage.json && chmod 660 /tmp/repl-storage.json
+
+# Copia de scripts 
+COPY control_chip-repl.sh /usr/local/bin/control_chip-repl.sh
+RUN chmod +x /usr/local/bin/control_chip-repl.sh
+
+# Ejecucion del sh para arrancar el contenedor
+CMD ["/usr/local/bin/control_chip-repl.sh"]

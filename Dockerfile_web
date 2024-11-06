@@ -1,0 +1,21 @@
+# Dockerfile para web
+FROM python:3.9-slim
+
+# Instala dependencias de sistema
+RUN apt-get update && apt-get install -y \
+    sqlite3 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copia de archivos necesarios
+WORKDIR /home/juan/matter/connectedhomeip
+COPY web.py .
+COPY templates/ templates/
+
+# Instala dependencias de Python
+RUN pip install Flask
+
+# Exposicion del puerto 5000
+EXPOSE 5000
+
+# Inicio del web.py
+CMD ["python3", "web.py"]

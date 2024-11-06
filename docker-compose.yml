@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  chip-repl:
+    build:
+      context: .
+      dockerfile: Dockerfile_chip-repl
+    privileged: true
+    network_mode: "host"
+    volumes:
+      - /var/run/dbus:/var/run/dbus
+      - /home/juan/matter/connectedhomeip:/home/juan/matter/connectedhomeip
+      - /home/juan/matter/connectedhomeip/persistent_tmp:/tmp
+      - /home/juan/bin:/home/juan/bin
+    devices:
+      - /dev/bus/usb:/dev/bus/usb
+      - /dev/hci0:/dev/hci0
+    cap_add:
+      - SYS_ADMIN
+      - NET_ADMIN
+    environment:
+      - PYTHONUNBUFFERED=1
+      - MODE=${MODE:-0}  
+    tty: true  
+    stdin_open: true  
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile_web
+    network_mode: "host"
+    command: python3 /home/juan/matter/connectedhomeip/web.py 
+    volumes:
+      - /home/juan/matter/connectedhomeip:/home/juan/matter/connectedhomeip
