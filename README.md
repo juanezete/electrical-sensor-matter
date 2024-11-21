@@ -47,11 +47,11 @@ Es fundamental haber completado previamente los pasos descritos en el apartado d
   ```bash
    idf.py set-target esp32c6
   ```
-3-Compilaion del proyecto
+3. Compilacion del proyecto
   ```bash
    idf.py build
   ```
-4- Flasheo y monitorizacion
+4. Flasheo y monitorizacion
   ```bash
    idf.py flash monitor
   ```
