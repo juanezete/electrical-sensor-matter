@@ -77,7 +77,7 @@ Al iniciar el sistema completo con Docker Compose, existen dos opciones:
    ```
    MODE=1 docker-compose up 
    ```
-   -Reconectar al dispositivo (**requiere que haya sido comisionado previamente**)
+   - Reconectar al dispositivo (**requiere que haya sido comisionado previamente**)
    ```
    docker-compose up
    ```
